@@ -1,0 +1,112 @@
+*Part 1: HTML*
+```
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tic Tac Toe</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<h1>Tic Tac Toe</h1>
+	<div class="board">
+		<div class="row">
+			<div class="cell" id="cell-1"></div>
+			<div class="cell" id="cell-2"></div>
+			<div class="cell" id="cell-3"></div>
+		</div>
+		<div class="row">
+			<div class="cell" id="cell-4"></div>
+			<div class="cell" id="cell-5"></div>
+			<div class="cell" id="cell-6"></div>
+		</div>
+		<div class="row">
+			<div class="cell" id="cell-7"></div>
+			<div class="cell" id="cell-8"></div>
+			<div class="cell" id="cell-9"></div>
+		</div>
+	</div>
+	<button id="reset-button">Reset</button>
+	<script src="script.js"></script>
+</body>
+</html>
+```
+
+*Part 2: CSS (style.css)*
+```
+.board {
+	display: flex;
+	flex-wrap: wrap;
+	width: 300px;
+	height: 300px;
+}
+.row {
+	display: flex;
+	width: 100%;
+}
+.cell {
+	width: 33.33%;
+	height: 33.33%;
+	border: 1px solid black;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 24px;
+	cursor: pointer;
+}
+```
+
+*Part 3: JavaScript (script.js)*
+```
+let board = [
+	['', '', ''],
+	['', '', ''],
+	['', '', '']
+];
+let currentPlayer = 'X';
+document.querySelectorAll('.cell').forEach(cell => {
+	cell.addEventListener('click', () => {
+		if (cell.textContent === '') {
+			cell.textContent = currentPlayer;
+			board[cell.id.split('-')[1] - 1] = currentPlayer;
+			if (checkWin()) {
+				alert(`Player ${currentPlayer} wins!`);
+			} else {
+				currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+			}
+		}
+	});
+});
+document.getElementById('reset-button').addEventListener('click', () => {
+	board = [
+		['', '', ''],
+		['', '', ''],
+		['', '', '']
+	];
+	currentPlayer = 'X';
+	document.querySelectorAll('.cell').forEach(cell => {
+		cell.textContent = '';
+	});
+});
+function checkWin() {
+	// Check rows
+	for (let i = 0; i < 3; i++) {
+		if (board[i][0] === board[i][1] && board[i][1] === board[i][2] && board[i][0] !== '') {
+			return true;
+		}
+	}
+	// Check columns
+	for (let i = 0; i < 3; i++) {
+		if (board[0][i] === board[1][i] && board[1][i] === board[2][i] && board[0][i] !== '') {
+			return true;
+		}
+	}
+	// Check diagonals
+	if (board[0][0] === board[1][1] && board[1][1] === board[2][2] && board[0][0] !== '') {
+		return true;
+	}
+	if (board[0][2] === board[1][1] && board[1][1] === board[2][0] && board[0][2] !== '') {
+		return true;
+	}
+	return false;
+}
+```
